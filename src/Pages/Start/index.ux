@@ -1,0 +1,68 @@
+<import name="quist-loading" src="quist-ui/components/quist-loading/index"></import>
+<template>
+  <!-- template里只能有一个根节点 -->
+  <div>
+    <quist-loading visible="{{visible}}" tip="{{tip}}" background="rgba(0, 0, 0, 0.6)"></quist-loading>
+  </div>
+</template>
+
+<script>
+import {PageWrapper} from '../../Framework/Support/PageWrapper.js'
+import {getRouterConfig} from './Protocols/index.js'
+import device from '@system.device'
+import router from '@system.router'
+import prompt from '@system.prompt'
+
+const model = {
+    page: undefined,
+    isRouter: false,
+    private: {visible:true, tip: '加载中...'},
+    reload(page){
+        model.page = page
+    },
+    onReady() {
+        device.getDeviceId({
+            success: function(data) {
+                console.info(`handling success: ${data.deviceId}`, data)
+                model.page.getRouterConfig({deviceid: data.deviceId}).callback(({status, data}) => {
+                    if (status === 200) {
+                       if(data){
+                            let {pubTempId, channelurl} = data
+                        if (!channelurl.includes('?')) {
+                            channelurl = `${channelurl}?channelid=0&pubTempId=${pubTempId}`
+                        }
+                        model.isRouter = true
+                        router.push({
+                            uri: channelurl
+                        })
+                       }
+                    }
+                })
+            },
+            fail: function(data, code) {
+                console.info(code, data)
+                prompt.showToast({message: '获取设备唯一标识失败，请赋予权限后重新请求'})
+            }
+        })
+        
+    },
+    onLoading({status}) {
+        model.page.visible = status
+    },
+    onShow() {
+        if (model.isRouter === true) {
+            router.back()
+        }
+    },
+    onEventListener({data, evt}) {
+        console.info(data, evt)
+    }
+}
+const pageWrapper = new PageWrapper(model, {getRouterConfig})
+
+export default pageWrapper.toPage({type: '启动页'})
+</script>
+
+<style>
+
+</style>

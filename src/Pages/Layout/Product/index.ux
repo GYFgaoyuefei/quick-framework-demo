@@ -1,0 +1,94 @@
+<import name="start-page" src="../../Infocenter/index.ux"></import>
+ <import name="image-text" src="./list.ux"></import>
+
+<template>
+    <div class="product">
+        <div class="product-classification">
+            <div class="classification-list" onclick="onEventListener({ key: '1', type: 'changeListKey' })">
+                <text>梦网科技</text>
+            </div>
+            <div class="classification-list" onclick="onEventListener({ key: '2', type: 'changeListKey' })">
+                <text>梦网集团</text>
+            </div>
+            <div class="classification-list" onclick="onEventListener({ key: '3', type: 'changeListKey' })">
+                <text>梦网数智</text>
+            </div>
+        </div>
+        <div class="classification-content">
+            <list id="list">
+                <block for="{{ listData }}">
+                    <list-item type="{{ $idx }}">
+                        <div class="classification-content-list">
+                            <image-text content="{{ $item.content }}"></image-text>
+                        </div>
+                    </list-item>
+                </block>
+            </list>
+        </div>
+    </div>
+</template>
+
+<script>
+import {PageWrapper} from '../../../Framework/Support/PageWrapper.js'
+import device from '@system.device'
+import router from '@system.router'
+import prompt from '@system.prompt'
+import { contentList } from './data.js';
+
+const model = {
+    page: undefined,
+    isRouter: false,
+    private: {
+        listData: [] 
+    },
+    reload(page){
+        model.page = page
+    },
+    onInit() {
+        console.log('onInit')
+        model.page.listData = contentList;
+    },
+    changeListKey(key) {
+        model.page.listData = [];
+    },
+    onEventListener({data, evt}) {
+        if (model[data.type]) {
+            model[data.type](data, evt)
+        }
+    }
+}
+const pageWrapper = new PageWrapper(model)
+
+export default pageWrapper.toPage({type: '产品分类'})
+</script>
+
+<style lang="less">
+    .product {
+        flex-direction: row;
+        .product-classification {
+            flex-direction: column;
+            border-right-color: #dddddd;
+            border-right-width: 2px;
+            width: 300px;
+            .classification-list {
+                padding-left: 5px;
+                height: 80px;
+                align-items: center;
+                border-bottom-color: #dddddd;
+                border-bottom-width: 2px;
+                text {
+                    width: percentage(1.0);
+                    height: percentage(1.0);
+                    height: 30px;
+                    lines: 1;
+                    text-overflow: ellipsis;
+                }
+            }
+        }
+        .classification-content {
+            padding-bottom: 100px;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+    }
+</style>

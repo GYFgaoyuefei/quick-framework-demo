@@ -1,0 +1,171 @@
+<import name="el-row" src="quist-element/components/el-row"></import>
+<import name="el-col" src="quist-element/components/el-col"></import>
+
+<template>
+    <div class="com-container">
+        <div class="com-header"> 
+            <el-col span="{{20}}">
+                <div class="com-left" style="margin-left: 15px;">
+                    <image src="{{comProfileInfo.logoIcon}}" style="width:60px;height:60px" ></image>
+                    <text class="com-title">{{comProfileInfo.comName}}</text>
+                </div>
+            </el-col>
+        </div>
+        <div class="com-body">
+            <div class="com-background">
+                <image src="{{comProfileInfo.backIcon}}" class="com-image"></image>
+            </div>
+            <div class="com-content">
+                <!-- <div class="com-content-title">
+                    <div class="com-content-text"><text style='font-weight: bold;'>{{comProfileInfo.profileTitle}}</text></div>
+                </div> -->
+                <div class="com-content-body">
+                    <!-- <text>{{comProfileInfo.content}}</text> -->
+                    <richtext type="html">{{comProfileInfo.content}}</richtext>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+import {PageWrapper} from '../../Framework/Support/PageWrapper.js'
+import {getSimplePageInfo, saveAccess} from './Protocols/index.js'
+import util from '../../Utils/Tools.js'
+import prompt from '@system.prompt'
+import device from '@system.device'
+const model = {
+    page: undefined,
+    public:{  //允许被外部或应用内部传入的值覆盖 
+        channelid:'',     //渠道id
+        pubTempId:''
+    },
+    private: {
+        comProfileInfo: {
+            logoIcon:'',
+            comName:'',
+            profileTitle:'',
+            backIcon:'',
+            content:''
+        }
+    },
+    reload(page) {model.page = page},
+    onReady() {
+        model.page.getSimplePageInfo({pubTempId: model.page.pubTempId}).callback(({status, data}) => {
+            if(data && status === 200){
+                if(data.ret === '0'){
+                    let newRich = data.comProfileInfo.content ? util.formatRichText(data.comProfileInfo.content) : ''
+                    data.comProfileInfo.content = newRich
+                    model.page.comProfileInfo = data.comProfileInfo
+                    model.page.$page.setTitleBar({text: model.page.comProfileInfo.comName})
+                }else{
+                    prompt.showToast({ message: data.desc})
+                }
+            }else{
+                prompt.showToast({ message: data})
+            }
+        })
+        if(model.page.channelid && model.page.channelid != '0'){
+            device.getDeviceId({
+                success:function(data){
+                    model.page.saveAccess({deviceid: data.deviceId,channelid:model.page.channelid,pubTempId: model.page.pubTempId,channelurl:'Pages/Companyprofile'}).callback()
+                },
+                fail:function(data,code){
+                    prompt.showToast({ message: '获取设备标识失败.'})
+                }
+            })
+        }
+    },
+    getComProfileInfoResponse({status, data}){
+        if(data && status === 200){
+            if(data.ret === '0'){
+                let newRich = util.formatRichText(data.comProfileInfo.content)
+                data.comProfileInfo.content = newRich
+                model.page.comProfileInfo = data.comProfileInfo
+                model.page.$page.setTitleBar({text: model.page.comProfileInfo.comName})
+            }else{
+                prompt.showToast({ message: data.desc})
+            }
+        }else{
+            prompt.showToast({ message: data})
+        }
+    }
+}
+const pageWrapper = new PageWrapper(model, {getSimplePageInfo, saveAccess})
+
+export default pageWrapper.toPage({type: '单页展示页'})
+</script>
+<style lang="less">
+@percentheight:300px;
+@percentWidth:1.0;
+.com-container{
+    flex: 1;
+    flex-direction: column;
+    .com-header{
+        position: fixed;
+        z-index: 1;
+        top:0;
+        left: 0;
+        right: 0;
+        width: percentage(@percentWidth);
+        height: 100px;
+        background-color: #ffffff;
+        .com-back{
+            width: percentage(1.0);
+            height: 100px;
+            align-items: center;
+            justify-content: center;
+        }
+        .com-left{
+            width: percentage(1.0);
+            height: 100px;
+            align-items: center;
+            .com-title{
+                margin-left: 10px;
+                font-weight: bold;
+                lines: 1;
+                font-size: 38px;
+                text-overflow: ellipsis;
+            }
+        }
+    }
+    .com-body{
+        flex: 1;
+        flex-direction: column;
+        background-color: #ffffff;
+        .com-background{
+            height:@percentheight;
+            width:percentage(@percentWidth);
+            .com-image{
+                width:percentage(@percentWidth);
+                height:@percentheight ;
+                background-size: 100% 100%;
+                background-repeat: no-repeat;
+            }
+        }
+        .com-content{
+            flex-direction: column;
+            margin-top: 20px;
+            .com-content-title{
+                width:percentage(@percentWidth);
+                height: 80px;
+                align-content: center;
+                justify-content: center;
+                .com-content-text{
+                    width:percentage(0.5);
+                    height: 80px;
+                    border: 1px solid #ddd;
+                    border-radius: 40px;
+                    align-content: center;
+                    justify-content: center;
+                }
+            }
+            .com-content-body{
+                margin-top: 30px;
+                margin-left: 20px;
+                margin-right: 20px;
+                margin-bottom: 30px;
+            }
+        }
+    }
+}
+</style>

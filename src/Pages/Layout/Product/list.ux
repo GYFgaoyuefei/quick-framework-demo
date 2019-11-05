@@ -1,0 +1,191 @@
+<template>
+  <div class="doc-page">
+        <div class="layout">
+            <div class="layout-up-down" if="{{ imagePosition === 'top' }}">
+                <div class="image-top">
+                    <image src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png" class="top-image" ></image>
+                </div>
+                <div class="text-down" onclick="clickContent">
+                    <text class="text-down-title">{{ content }}</text>
+                </div>
+                <div class="text-time" if="{{ showTime }}">
+                    <text show="{{ showTime }}" class="text-time-footer">{{ time }}</text>
+                </div>
+            </div>
+            <div class="layout-up-down" if="{{ imagePosition === 'bottom' }}">
+                <div class="text-down" onclick="clickContent">
+                    <text class="text-down-title">{{ content }}</text>
+                </div>
+                <div class="image-top">
+                    <image src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png" class="top-image" ></image>
+                </div>
+                <div class="text-time" if="{{ showTime }}">
+                    <text show="{{ showTime }}" class="text-time-footer">{{ time }}</text>
+                </div>
+            </div>
+            <div class="layout-left-right" if="{{ imagePosition === 'left' }}">
+                <div class="layout-left-right-content">
+                    <div class="image-left">
+                        <image src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png" class="left-image" ></image>
+                    </div>
+                    <div class="text-right" onclick="clickContent">
+                        <text class="text-right-title">{{ content }}</text>
+                    </div>
+                </div>
+                <div class="text-time" if="{{ showTime }}">
+                    <text show="{{ showTime }}" class="text-time-footer">{{ time }}</text>
+                </div>
+            </div>
+            <div class="layout-left-right" if="{{ imagePosition === 'right' }}">
+                <div class="layout-left-right-content">
+                    <div class="text-left" onclick="clickContent">
+                        <text class="text-left-title">{{ content }}</text>
+                    </div>
+                    <div class="image-right">
+                        <image src="https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png" class="right-image" ></image>
+                    </div>
+                </div>
+                <div class="text-time" if="{{ showTime }}">
+                    <text show="{{ showTime }}" class="text-time-footer">{{ time }}</text>
+                </div>
+            </div>
+        </div>
+  </div>
+</template>
+
+<script>
+    export default {
+        props: {
+            showTime: {
+                default: false, // 默认值
+            },
+            imagePosition: {
+                default: 'left', // 默认值
+            },
+            content: {
+                default: null, // 默认值
+            },
+            time: {
+                default: new Date(), // 默认值
+            }
+        },
+        data() {
+            return{
+                showTime: this.showTime,
+                imagePosition: this.imagePosition,
+                content: this.content,
+                time: this.time,
+            }
+        },
+        clickContent(evt) {
+            this.$emit('clickcontent',{
+                data: evt
+            })
+        },
+    }
+</script>
+
+<style lang="less">
+@percentheight:300px;
+@percentWidth:1.7;
+.doc-page {
+    padding: 10px;
+    .layout {
+        flex-direction: column;
+        .layout-up-down {
+            flex-direction: column;
+            border-bottom-width: 2px;
+            border-bottom-color: #ddd;
+            padding: 10px 0;
+            text {
+                font-size: 30px;
+                font-weight: bold;
+            };
+            .image-top {
+                width: percentage(1.0);
+                .top-image {
+                    width: percentage(1.0);
+                    height: 350px;
+                    resize-mode: stretch;
+                }
+            }
+            .text-down {
+                height: 90px;
+                .text-down-title {
+                    width: percentage(1.0);
+                    /* height: percentage(0.25); */
+                    align-items: center;
+                    lines: 2;
+                    text-overflow: ellipsis;
+                    color: #000000;
+                    font-weight: 600;
+                }
+            }
+        }
+
+        .layout-left-right {
+            flex-direction: column;
+            padding: 10px 0;
+            border-bottom-width: 2px;
+            border-bottom-color: #ddd;
+            .layout-left-right-content {
+                height: 120px;
+                .image-left {
+                    flex-shrink: 0;
+                    height: percentage(1.0);
+                    .left-image {
+                        width: 120px;
+                        height: percentage(1.0);
+                    }
+                }
+                .text-right {
+                    /* width: percentage(1.0); */
+                    height: percentage(1.0);
+                    padding: 10px;
+                    /* align-items: center; */
+                    .text-right-title {
+                        width: percentage(1.0);
+                        height: 85px;
+                        line-height: 85px;
+                        align-items: center;
+                        lines: 2;
+                        text-overflow: ellipsis;
+                        color: #000000;
+                        font-weight: 600;
+                    }
+                }
+                .text-left {
+                    height: percentage(1.0);
+                    margin-right: 10px;
+                    .text-left-title {
+                        width: percentage(1.0);
+                        /* height: percentage(0.25); */
+                        height: 85px;
+                        align-items: center;
+                        lines: 2;
+                        text-overflow: ellipsis;
+                        color: #000000;
+                        font-weight: 600;
+                    }
+                }
+                .image-right {
+                    /* margin-left: auto; */
+                    /* align-self: flex-end; */
+                    height: percentage(1.0);
+                    flex-shrink: 0;
+                    .right-image {
+                        width: 120px;
+                        height: percentage(1.0);
+                    }
+                }
+            }
+        }
+        .text-time {
+            .text-time-footer {
+                font-size: 20px;
+                font-weight: bold;
+            }
+        }
+    }
+} 
+</style>

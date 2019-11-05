@@ -1,0 +1,199 @@
+<template>
+    <div class="doc-page">
+        <div class="home-banner">
+            <image class="banner" src="../../../Image/banner.jpeg"></image>
+        </div>
+        <div class="box-list">
+            <div class="box-list-child">
+                <div class="box-list-child-content">
+                    <div class="box-single">
+                        <image class="box-image" src="../../../Image/banner.jpeg"></image>
+                    </div>
+                    <div class="single-title">
+                        <text>1</text>
+                    </div>
+                </div>
+            </div>
+            <div class="box-list-child">
+                <div class="box-list-child-content">
+                    <div class="box-single">
+                        <image class="box-image" src="../../../Image/banner.jpeg"></image>
+                    </div>
+                    <div class="single-title">
+                        <text>2</text>
+                    </div>
+                </div>
+            </div>
+            <div class="box-list-child">
+                <div class="box-list-child-content">
+                    <div class="box-single">
+                        <image class="box-image" src="../../../Image/banner.jpeg"></image>
+                    </div>
+                    <div class="single-title">
+                        <text>3</text>
+                    </div>
+                </div>
+            </div>
+            <div class="box-list-child">
+                <div class="box-list-child-content">
+                    <div class="box-single">
+                        <image class="box-image" src="../../../Image/banner.jpeg"></image>
+                    </div>
+                    <div class="single-title">
+                        <text>4</text>
+                    </div>
+                </div>
+            </div>
+            <div class="box-list-child">
+                <div class="box-list-child-content">
+                    <div class="box-single">
+                        <image class="box-image" src="../../../Image/banner.jpeg"></image>
+                    </div>
+                    <div class="single-title">
+                        <text>5</text>
+                    </div>
+                </div>
+            </div>
+            <div class="box-list-child">
+                <div class="box-list-child-content">
+                    <div class="box-single">
+                        <image class="box-image" src="../../../Image/banner.jpeg"></image>
+                    </div>
+                    <div class="single-title">
+                        <text>6</text>
+                    </div>
+                </div>
+            </div>
+            <div class="box-list-child">
+                <div class="box-list-child-content">
+                    <div class="box-single">
+                        <image class="box-image" src="../../../Image/banner.jpeg"></image>
+                    </div>
+                    <div class="single-title">
+                        <text>7</text>
+                    </div>
+                </div>
+            </div>
+            <div class="box-list-child">
+                <div class="box-list-child-content">
+                    <div class="box-single">
+                        <image class="box-image" src="../../../Image/banner.jpeg"></image>
+                    </div>
+                    <div class="single-title">
+                        <text>8</text>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="warp-list">
+            <div class="warp-list-image">
+                <image class="warp-image" src="../../../Image/banner.jpeg"></image>
+            </div>
+            <div class="warp-list-mask">
+            </div>
+            <div class="warp-list-title">
+                <text>图片上的描述</text>
+            </div>
+        </div>
+        <div class="warp-list">
+            <div class="warp-list-image">
+                <image class="warp-image" src="../../../Image/banner.jpeg"></image>
+            </div>
+            <div class="warp-list-mask">
+            </div>
+            <div class="warp-list-title">
+                <text>图片上的描述</text>
+            </div>
+        </div>
+        <div class="warp-list">
+            <div class="warp-list-image">
+                <image class="warp-image" src="../../../Image/banner.jpeg"></image>
+            </div>
+            <div class="warp-list-mask">
+            </div>
+            <div class="warp-list-title">
+                <text>图片上的描述</text>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+export default {
+    props: {
+        propA: {
+            default: '11'
+        }
+    },
+}
+</script>
+
+
+<style lang="less">
+    .doc-page {
+        flex-direction: column;
+        .home-banner {
+            width: 100%;
+            height: 264px;
+            .banner {
+                width: 100%;
+                height: 100%;
+            }
+        }
+        .box-list {
+            padding: 20px;
+            flex-direction: row;
+            flex-wrap: wrap;
+            .box-list-child {
+                width: percentage(0.25);
+                justify-content: center;
+                .box-list-child-content {
+                    flex-direction: column;
+                    margin-bottom: 8px;
+                    .box-single {
+                        width: 100px;
+                        height: 80px;
+                        margin-bottom: 8px;
+                        .box-image {
+                            width: percentage(1.0);
+                            height: percentage(1.0);
+                        }
+                    }
+                    .single-title {
+                        justify-content: center;
+                    }
+                }
+            }
+        }
+        .warp-list {
+            padding: 20px;
+            flex-direction: column;
+            .warp-list-image {
+                width: percentage(1.0);
+                height: 200px;
+                .warp-image{
+                    width: percentage(1.0);
+                    height: percentage(1.0);
+                }
+            }
+            .warp-list-mask {
+                position: relative;
+                bottom: 50px;
+                background-color: #000000;
+                opacity: 0.5;
+                z-index: 5;
+                height: 50px;
+            }
+            .warp-list-title {
+                justify-content: center;
+                position: relative;
+                bottom: 100px;
+                z-index: 10;
+                text {
+                    color: #ffffff;
+                }
+            }
+        }
+    }
+</style>
+

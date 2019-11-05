@@ -1,0 +1,98 @@
+<import name="home" src="./Home/index.ux"></import>
+<import name="product" src="./Product/index.ux"></import>
+<import name="about-us" src="./AboutUs/index.ux"></import>
+<template>
+    <div>
+        <div class="tabs">
+            <div class="tab-bar" onclick="onEventListener({ key: '1', type: 'changeTabactive' })">
+                <text>首页</text>
+            </div>
+            <div class="tab-bar" onclick="onEventListener({ key: '2', type: 'changeTabactive' })">
+                <text>产品</text>
+            </div>
+            <div class="tab-bar" onclick="onEventListener({ key: '3', type: 'changeTabactive' })">
+                <text>关于我们</text>
+            </div>
+        </div>
+        <div if="{{ activekey === '1' }}">
+            <home></home>
+        </div>
+        <div elif="{{ activekey === '2' }}">
+            <product></product>
+        </div>
+        <div else="{{ activekey === '3' }}">
+            <about-us></about-us>
+        </div>
+    </div>
+</template>
+
+<script>
+import {PageWrapper} from '../../Framework/Support/PageWrapper.js'
+import device from '@system.device'
+import router from '@system.router'
+import prompt from '@system.prompt'
+
+const model = {
+    page: undefined,
+    isRouter: false,
+    private: {
+        componentName: 'tabs',
+        time: '',
+        loadMore: true,
+        scrollPage: false,
+        scrollable: true,
+        activekey: '2',
+    },
+    reload(page){
+        model.page = page
+    },
+    changeTabactive(data) {
+      // 切换tab
+      model.page.activekey = data.key;
+      if (data.key === '1') {
+        model.page.$page.setTitleBar({ text: '首页' })
+      }
+      if (data.key === '2') {
+        model.page.$page.setTitleBar({ text: '产品分类' })
+      }
+      if (data.key === '3') {
+        model.page.$page.setTitleBar({ text: '关于我们' })
+      }
+    },
+    onEventListener({data, evt}) {
+        if (model[data.type]) {
+            model[data.type](data, evt)
+        }
+    }
+}
+const pageWrapper = new PageWrapper(model)
+
+export default pageWrapper.toPage({type: '首页'})
+</script>
+
+<style lang="less">
+    .tabs {
+        position: fixed;
+        bottom: 0;
+        height: 100px;
+        background-color: #ffffff;
+        border-top-color: #dddddd;
+        border-top-width: 2px;
+        .tab-bar {
+            width: percentage(0.33);
+            height: percentage(1.0);
+            flex: 1;
+            flex-grow: 1;
+            justify-content: center;
+        }
+    }
+
+    .tab-bar:active {
+        background-color: #dddddd;
+    }
+    .item-container {
+        flex: 1;
+        flex-direction: column;
+    }
+</style>
+

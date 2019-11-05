@@ -1,0 +1,151 @@
+<import name="el-row" src="quist-element/components/el-row"></import>
+<import name="el-col" src="quist-element/components/el-col"></import>
+
+<template>
+    <div class="con-container">
+        <div class="con-body">
+            <!-- <div class="con-background">
+                <image src="{{contentDetailInfo.backIcon}}" class="con-image"></image>
+            </div> -->
+            <div class="con-content">
+                <div class="con-content-body">
+                    <!-- <text>{{contentDetailInfo.content}}</text> -->
+                    <richtext type="html" >{{contentDetailInfo.content}}</richtext>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+<script>
+import {PageWrapper} from '../../Framework/Support/PageWrapper.js'
+import {getInfoDetail} from './Protocols/index.js'
+import util from '../../Utils/Tools.js'
+import router from '@system.router'
+import prompt from '@system.prompt'
+
+const model = {
+    page: undefined,
+    public:{  //允许被外部或应用内部传入的值覆盖 
+        contentId:'',     //内容id
+        channelid:'',
+        pubTempId:''
+    },
+    private: {
+        contentDetailInfo: {
+            contentTitle:'',
+            backIcon:'',
+            content:'',
+            pubTempId:''
+        }
+    },
+    reload(page) {
+        model.page = page
+    },
+    onReady() {
+        
+        model.page.getInfoDetail({contentId: model.page.contentId}).callback(model.getContentInfoResponse)
+    },
+    getContentInfoResponse({status, data}){
+        if(status === 200 && data){
+            if(data.ret === '0'){
+                let newRich = util.formatRichText(data.contentDetailInfo.content)
+                data.contentDetailInfo.content = newRich
+                model.page.contentDetailInfo = data.contentDetailInfo
+                
+                model.page.$page.setTitleBar({'text': model.page.contentDetailInfo.contentTitle})
+            }else{
+                model.page.$app.$def.prompt.showToast({ message: data.desc})
+                model.page.$page.setTitleBar({'text': '系统异常'})
+            }
+        }else{
+            prompt.showToast({ message: data})
+            model.page.$page.setTitleBar({'text': '系统异常'})
+        }
+    },
+    gotoBack(){
+        router.back()
+    },
+    onEventListener({data,evt}) {
+        if (model[data.type]) {
+            model[data.type](data, evt)
+        }
+    }
+}
+const pageWrapper = new PageWrapper(model, {getInfoDetail})
+
+export default pageWrapper.toPage({type: '列表详情页'})
+</script>
+<style lang="less">
+@percentheight:300px;
+@percentWidth:1.0;
+.con-container{
+    flex: 1;
+    flex-direction: column;
+    .con-header{
+        position: fixed;
+        z-index: 1;
+        top:0;
+        left: 0;
+        right: 0;
+        width: percentage(@percentWidth);
+        height: 100px;
+        background-color: #ffffff;
+        .con-back{
+            width: percentage(1.0);
+            height: 100px;
+            align-items: center;
+            justify-content: center;
+        }
+        .con-left{
+            width: percentage(1.0);
+            height: 100px;
+            align-items: center;
+            .con-title{
+                margin-left: 10px;
+                font-weight: bold;
+                lines: 1;
+                text-overflow: ellipsis;
+            }
+        }
+    }
+    .con-body{
+        flex: 1;
+        flex-direction: column;
+        background-color: #ffffff;
+        .con-background{
+            height:@percentheight;
+            width:percentage(@percentWidth);
+            .con-image{
+                width:percentage(@percentWidth);
+                height:@percentheight ;
+                background-size: 100% 100%;
+                background-repeat: no-repeat;
+            }
+        }
+        .con-content{
+            flex-direction: column;
+            /* margin-top: 20px; */
+            .con-content-title{
+                width:percentage(@percentWidth);
+                height: 80px;
+                align-content: center;
+                justify-content: center;
+                .con-content-text{
+                    width:percentage(0.5);
+                    height: 80px;
+                    border: 1px solid #ddd;
+                    border-radius: 40px;
+                    align-content: center;
+                    justify-content: center;
+                }
+            }
+            .con-content-body{
+                /* margin-top: 30px; */
+                margin-left: 20px;
+                margin-right: 20px;
+                margin-bottom: 30px;
+            }
+        }
+    }
+}
+</style>

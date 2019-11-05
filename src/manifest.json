@@ -1,0 +1,92 @@
+{
+  "package": "quick.menghundred",
+  "name": "快门户",
+  "versionName": "1.0.0",
+  "versionCode": "1",
+  "minPlatformVersion": "1040",
+  "icon": "/Common/logo_sp.png",
+  "features": [
+    {
+      "name": "system.prompt"
+    },
+    {
+      "name": "system.router"
+    },
+    { "name": "system.device" },
+    { "name": "system.fetch" }
+  ],
+  "permissions": [
+    {
+      "origin": "*"
+    }
+  ],
+  "config": {
+    "logLevel": "off",
+    "data": {
+      "center": {
+        "uri": "http://119.23.252.255:9726/quickapp/data/center",
+        "debug": true,
+        "mock": "none"
+      }
+    }
+
+  },
+  "router": {
+    "entry": "Pages/Layout",
+    "pages": {
+      "Pages/Layout": {
+        "component": "index"
+      },
+      "Pages/Layout/Home": {
+        "component": "index"
+      },
+      "Pages/Layout/Product": {
+        "component": "index"
+      },
+      "Pages/Layout/AboutUs": {
+        "component": "index"
+      },
+      "Pages/Start": {
+        "component": "index"
+      },
+      "Pages/Head": {
+        "component": "index"
+      },
+      "Pages/Infocenter": {
+        "component": "index"
+      },
+      "Pages/InfoDetail": {
+        "component": "index"
+      },
+      "Pages/Companyprofile": {
+        "component": "index"
+      }
+    }
+  },
+  "display": {
+    "titleBarBackgroundColor": "#f2f2f2",
+    "titleBarTextColor": "#414141",
+    "menu": true,
+    "pages": {
+      "Pages/Layout": {
+        "titleBarText": "首页",
+        "menu": false
+      },
+      "Pages/Start": {
+        "titleBarText": "快门户",
+        "menu": false
+      },
+      "Pages/Infocenter": {
+        "menu": false,
+        "titleBar": false
+      },
+      "Pages/InfoDetail": {
+        "menu": false
+      },
+      "Pages/Companyprofile": {
+        "menu": false,
+        "titleBar": false
+      }
+    }
+  }
+}
